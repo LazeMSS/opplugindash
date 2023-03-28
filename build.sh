@@ -15,7 +15,7 @@ if [[ -z "${GITHUB_REPOSITORY_OWNER}" ]]; then
 else
 	curUser=$GITHUB_REPOSITORY_OWNER
 fi
-now=$(date +'%Y-%m-%d')
+now=$(date +'%Y-%m-%d-%s')
 
 errormsg(){
 	echo -e "\e[0;31m"Error: "\e[0m""$1"
