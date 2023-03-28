@@ -11,19 +11,20 @@ jobs:
     steps:
       - uses: actions/checkout@v3.4.0
         name: Checkout repo
-      
-      - name: Run script
-        run: ./build.sh
-      
+
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
+          (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
+
+      - name: Run script
+        run: ./build.sh
       
       - name: commit
         run: |
           # Stage the file, commit and push
           git add docs/data/*
           git commit -m "Adding new data"
-          git push
+          git push public
