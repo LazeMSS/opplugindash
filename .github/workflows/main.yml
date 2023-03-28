@@ -16,7 +16,6 @@ jobs:
 
       - name: setup git config
         run: |
-          ls -l docs/data
           git branch
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
