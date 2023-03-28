@@ -27,4 +27,4 @@ jobs:
           (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
           git add docs/data/*
           git commit -m "Adding new data"
-          git push
+          git push -u origin public
