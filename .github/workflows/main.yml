@@ -16,15 +16,11 @@ jobs:
 
       - name: setup git config
         run: |
-          git branch
-          # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          git branch
 
       - name: Run script
         run: |
-          git branch
           git checkout HEAD -- config.json
           git checkout HEAD -- docs
           ./build.sh
@@ -32,7 +28,6 @@ jobs:
       - name: commit
         run: |
           # Stage the file, commit and push
-          git branch
           git add docs/data/*
           git commit -m "Adding new data"
           git push --force -u origin public
