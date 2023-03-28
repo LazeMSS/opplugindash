@@ -1,7 +1,7 @@
 {
   "uicustomizer": {
     "2023-03-28": {
-      "instances": 10081,
+      "instances": 10065,
       "versions": {
         "0.1.0.0": {
           "instances": 3
@@ -52,7 +52,7 @@
           "instances": 2
         },
         "0.1.5.8": {
-          "instances": 9
+          "instances": 8
         },
         "0.1.5.9": {
           "instances": 12
@@ -73,7 +73,7 @@
           "instances": 2
         },
         "0.1.7.0": {
-          "instances": 38
+          "instances": 37
         },
         "0.1.8.0": {
           "instances": 46
@@ -88,25 +88,25 @@
           "instances": 124
         },
         "0.1.9.0": {
-          "instances": 8081
+          "instances": 8032
         },
         "0.1.9.1": {
-          "instances": 2417
+          "instances": 2418
         },
         "0.1.9.2": {
           "instances": 4147
         },
         "0.1.9.4": {
-          "instances": 2671
+          "instances": 2771
         }
       },
-      "install_events": 1475,
-      "uninstall_events": 139
+      "install_events": 1473,
+      "uninstall_events": 138
     }
   },
   "mqtt": {
     "2023-03-28": {
-      "instances": 3631,
+      "instances": 3626,
       "versions": {
         "0.2": {
           "instances": 1
@@ -118,16 +118,16 @@
           "instances": 10
         },
         "0.8.12": {
-          "instances": 179
+          "instances": 180
         },
         "0.8.13": {
-          "instances": 3347
+          "instances": 3341
         },
         "0.8.6": {
           "instances": 8
         },
         "0.8.7": {
-          "instances": 42
+          "instances": 41
         },
         "0.8.9": {
           "instances": 9
@@ -139,7 +139,7 @@
   },
   "toptemp": {
     "2023-03-28": {
-      "instances": 2300,
+      "instances": 2295,
       "versions": {
         "0.0.0.2": {
           "instances": 3
@@ -166,7 +166,7 @@
           "instances": 3
         },
         "0.0.1.7": {
-          "instances": 600
+          "instances": 601
         },
         "0.0.1.8": {
           "instances": 1
@@ -175,16 +175,16 @@
           "instances": 62
         },
         "0.0.2.1": {
-          "instances": 40
+          "instances": 39
         },
         "0.0.2.2": {
-          "instances": 185
+          "instances": 181
         },
         "0.0.2.3": {
-          "instances": 1623
+          "instances": 1620
         }
       },
-      "install_events": 211,
+      "install_events": 208,
       "uninstall_events": 14
     }
   }
