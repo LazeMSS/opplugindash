@@ -1,0 +1,47 @@
+{
+  "mqtt": {
+    "2023-03-28-1679997142 1": {
+      "stats": {
+        "instances_month": 3633,
+        "install_events_month": 310,
+        "instances_week": 2784,
+        "install_events_week": 67
+      },
+      "issues": {
+        "open": 37,
+        "closed": 62
+      },
+      "stars": 136
+    }
+  },
+  "uicustomizer": {
+    "2023-03-28-1679997142 1": {
+      "stats": {
+        "instances_month": 10078,
+        "install_events_month": 1475,
+        "instances_week": 7037,
+        "install_events_week": 349
+      },
+      "issues": {
+        "open": 14,
+        "closed": 223
+      },
+      "stars": 148
+    }
+  },
+  "toptemp": {
+    "2023-03-28-1679997142 1": {
+      "stats": {
+        "instances_month": 2302,
+        "install_events_month": 211,
+        "instances_week": 1670,
+        "install_events_week": 57
+      },
+      "issues": {
+        "open": 6,
+        "closed": 70
+      },
+      "stars": 22
+    }
+  }
+}
