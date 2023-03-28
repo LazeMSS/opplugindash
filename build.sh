@@ -12,6 +12,8 @@ statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 
 if [[ -z "${GITHUB_REPOSITORY_OWNER}" ]]; then
 	curUser=$USER
+else
+	curUser=$GITHUB_REPOSITORY_OWNER
 fi
 now=$(date +'%Y-%m-%d-%s')
 
