@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+	<meta charset="utf-8">
+	<meta content="width=device-width, initial-scale=1" name="viewport"><!-- Bootstrap CSS -->
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+	<title>OctoPrint plugin dashboard</title>
+</head>
+<body class="pt-5">
+	<nav class="shadow fixed-top px-3 py-2 navbar navbar-dark bg-dark">
+		<div class="container-fluid">
+			<span class="navbar-brand mb-0 h1 p-0"><a class="navbar-brand me-0" href="#">OctoPrint plugin dashboard</a></span>
+			<div class="spinner-border spinner-border-sm text-primary d-none" id="fetchSpinner" role="status">
+				<span class="visually-hidden">Loading...</span>
+			</div>
+			<div>
+				<a class="link-light align-middle ms-2" href="javascript:toogleDarkMOde();" title="Toggle darkmode"><i class="modeicon bi bi-moon"></i></a> <a class="link-light align-middle ms-2" href="javascript:loadData(true);" title="Refresh"><i class="bi bi-arrow-clockwise"></i></a>
+			</div>
+		</div>
+	</nav>
+	<div class="container-xl pb-5 mb-3">
+		<div class="position-absolute top-50 start-50 translate-middle" id="mainSpinner">
+			<div class="text-center">
+				<div aria-hidden="true" class="spinner-border text-primary ms-auto" role="status"></div><strong class="d-block">Loading...</strong>
+			</div>
+		</div>
+		<div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xxl-2 g-3 p-2" id="mainDash"></div>
+		<footer class="bg-body fixed-bottom d-flex flex-wrap justify-content-end align-items-center p-2 px-3 my-0 border-top">
+			<p class="text-muted mb-0">Updated <span id="lastudpated"></span></p>
+		</footer>
+	</div>
+	<script src="//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/cash/8.1.0/cash.min.js"></script>
+	<template id="mainDashTemplate">
+		<div class="col p-2">
+			<div class="card h-100 shadow-sm m-2">
+				<h5 class="card-header text-truncate position-relative"><span data-pinfo="title"></span><a class="position-absolute top-0 end-0 me-2 mt-2" data-pinfo="page" href="#" target="_blank"><i class="fs-6 bi bi-box-arrow-up-right"></i></a></h5>
+				<div class="card-body">
+					<div class="row">
+						<div class="col">
+							<canvas data-graph="versions"></canvas>
+						</div>
+						<div class="col">
+							<ul class="list-group list-group-flush">
+								<li class="list-group-item d-flex justify-content-between align-items-center">Active instances 30 days<span class="badge bg-secondary rounded-pill" data-pinfo="stats.instances_month"></span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">New installs 7 days<span class="badge bg-secondary rounded-pill" data-pinfo="stats.install_events_week"></span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">GitHub stars<span class="badge bg-secondary rounded-pill" data-pinfo="github.stars"></span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">GitHub releases<span class="badge bg-secondary rounded-pill" data-pinfo="github.releases"></span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">GitHub open issues<span class="badge bg-secondary rounded-pill" data-pinfo="github.issues.open"></span></li>
+								<li class="list-group-item d-flex justify-content-between align-items-center">GitHub closed issues<span class="badge bg-secondary rounded-pill" data-pinfo="github.issues.open"></span></li>
+							</ul>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col col-12">
+							<canvas data-graph="history"></canvas>
+						</div>
+					</div>
+				</div>
+				<div class="card-footer text-muted">
+					<a data-pinfo="homepage" href="#"><i class="bi bi-house-fill"></i></a> <a data-pinfo="archive" href="#"><i class="bi bi-github"></i></a> <span class="float-end text-muted" data-pinfo="github.latest_release.tag"></span>
+				</div>
+			</div>
+		</div>
+	</template>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+	<script src="//cdn.jsdelivr.net/npm/chart.js"></script>
+	<script src="main.js?new"></script>
+</body>
+</html>
