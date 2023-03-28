@@ -76,7 +76,6 @@ if [ ${#plugins[@]} -eq 0 ]; then
 fi
 echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
-
 # get stats
 curl -sS $pluginSrc --output plugins.json
 curl -sS $statsSrc --output stats.json
