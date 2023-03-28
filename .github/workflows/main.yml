@@ -17,7 +17,6 @@ jobs:
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
 
       - name: Run script
         run: ./build.sh
@@ -25,6 +24,7 @@ jobs:
       - name: commit
         run: |
           # Stage the file, commit and push
+          (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
           git add docs/data/*
           git commit -m "Adding new data"
-          git push public
+          git push -u origin public
