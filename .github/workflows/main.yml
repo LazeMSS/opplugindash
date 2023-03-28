@@ -16,7 +16,7 @@ jobs:
 
       - name: setup git config
         run: |
-          ls -l
+          ls -l docs/data
           git branch
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
@@ -26,8 +26,7 @@ jobs:
       - name: Run script
         run: |
           git branch
-          (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
-          git merge main
+          git merge origin/main
           ./build.sh
       
       - name: commit
