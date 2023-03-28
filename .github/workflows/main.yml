@@ -19,13 +19,14 @@ jobs:
           git config user.email "<>"
 
       - name: Run script
-        run: ./build.sh
+        run: |
+          (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
+          git pull origin main
+          ./build.sh
       
       - name: commit
         run: |
           # Stage the file, commit and push
-          (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
-          git pull origin main
           git add docs/data/*
           git commit -m "Adding new data"
           git push --force -u origin public
