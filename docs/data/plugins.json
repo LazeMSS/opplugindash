@@ -12,10 +12,36 @@
         "closed": 223
       },
       "stars": 148
+    },
+    "2023-03-28-1679991121": {
+      "stats": {
+        "instances_month": 10080,
+        "install_events_month": 1476,
+        "instances_week": 7031,
+        "install_events_week": 349
+      },
+      "issues": {
+        "open": 14,
+        "closed": 223
+      },
+      "stars": 148
     }
   },
   "toptemp": {
     "2023-03-28-1679990242": {
+      "stats": {
+        "instances_month": 2302,
+        "install_events_month": 211,
+        "instances_week": 1667,
+        "install_events_week": 56
+      },
+      "issues": {
+        "open": 6,
+        "closed": 70
+      },
+      "stars": 22
+    },
+    "2023-03-28-1679991121": {
       "stats": {
         "instances_month": 2302,
         "install_events_month": 211,
