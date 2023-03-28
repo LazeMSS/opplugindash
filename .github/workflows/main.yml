@@ -11,13 +11,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3.4.0
         name: Checkout repo
+        with:
+          ref: 'public'
 
       - name: setup git config
         run: |
+          ls -l
+          git branch
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-           git branch
+          git branch
 
       - name: Run script
         run: |
