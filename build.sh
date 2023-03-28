@@ -10,7 +10,7 @@ configFile="./config.json"
 pluginSrc="https://plugins.octoprint.org/plugins.json"
 statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 
-if [[ -z "${curUser}" ]]; then
+if [[ -z "${GITHUB_REPOSITORY_OWNER}" ]]; then
 	curUser=$USER
 fi
 now=$(date +'%Y-%m-%d-%s')
