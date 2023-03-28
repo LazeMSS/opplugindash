@@ -1,6 +1,6 @@
 #!/bin/bash
 # output data dir
-dataDir="./www/data/"
+dataDir="./docs/data/"
 statsFile="${dataDir}stats.json"
 pluginsFile="${dataDir}plugins.json"
 
