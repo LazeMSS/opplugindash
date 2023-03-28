@@ -9,17 +9,11 @@ jobs:
     name: Get octoprint.org data
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.4.0
-        name: Checkout repo
-        with:
-          ref: public
-
       - name: setup git config
         run: |
           # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
           git config user.name "GitHub Actions Bot"
           git config user.email "<>"
-          git pull origin main
 
       - name: Run script
         run: ./build.sh
@@ -28,6 +22,7 @@ jobs:
         run: |
           # Stage the file, commit and push
           (git show-branch public &>/dev/null) && (git checkout public) || (git checkout -b public)
+          git pull origin main
           git add docs/data/*
           git commit -m "Adding new data"
           git push --force -u origin public
