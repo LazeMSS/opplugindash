@@ -26,7 +26,8 @@ jobs:
       - name: Run script
         run: |
           git branch
-          git pull main
+          git checkout main -- config.json
+          git checkout main -- docs
           ./build.sh
       
       - name: commit
