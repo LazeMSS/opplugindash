@@ -34,6 +34,6 @@ jobs:
         run: |
           # Stage the file, commit and push
           git branch
-          # git add docs/data/*
-          # git commit -m "Adding new data"
-          # git push --force -u origin public
+          git add docs/data/*
+          git commit -m "Adding new data"
+          git push --force -u origin public
