@@ -26,7 +26,7 @@ jobs:
       - name: Run script
         run: |
           git branch
-          git merge origin/main
+          git pull origin main
           ./build.sh
       
       - name: commit
