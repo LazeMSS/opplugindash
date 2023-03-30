@@ -11,12 +11,13 @@ jobs:
     steps:
       - uses: actions/checkout@v3.4.0
         name: Checkout repo
+        with:
+          ref: 'pages'
           
       - name: Run script
         run: |
           git branch
           git pull
-          git checkout pages
           git merge main
           ./build.sh
           git commit -m "Updating pages"
