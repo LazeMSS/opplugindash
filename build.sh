@@ -44,18 +44,17 @@ if [ ! -d "${dataDir}${jsonDir}" ]; then
 	mkdir -p "${dataDir}${jsonDir}"
 fi
 
-# get current files local gh pages
+# get current files local gh page data
 curl -sS "$localPluginsSrc" --output "$statsFile"
 curl -sS "$localStatsSrc" --output "$pluginsFile"
 
 # Build new files if nothing was found
-if [ ! -f "$statsFile" ]; then
+if [ ! -f "$statsFile" ] || [ ! -s "$statsFile" ]; then
 	echo "{}" > $statsFile
 fi
-if [ ! -f "$pluginsFile" ]; then
+if [ ! -f "$pluginsFile" ] || [ ! -s "$pluginsFile" ]; then
 	echo "{}" > $pluginsFile
 fi
-
 
 # get octoprint data
 curl -sS -f $pluginSrc --output plugins.json
@@ -71,13 +70,13 @@ if [ $retVal -ne 0 ]; then
 	exit $retVal;
 fi
 
+# check the config file for errors
 mapfile -t plugins < <(jq -cr '.[]' $configFile)
 if [ ${#plugins[@]} -eq 0 ]; then
 	errormsg "Zero entries found in $configFile"
 	exit 1
 fi
 echo "Found ${#plugins[@]} plugin(s) in $configFile"
-
 
 # get stats timestamp
 statsTime=$(jq -cr '._generated' stats.json 2>&1)
