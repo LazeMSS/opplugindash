@@ -1,6 +1,6 @@
 #!/bin/bash
 # output data dir
-dataDir="./docs/data/"
+dataDir="./docs/json/"
 statsFile="${dataDir}stats.json"
 pluginsFile="${dataDir}plugins.json"
 localStatsSrc="https://lazemss.github.io/opplugindash/data/stats.json"
