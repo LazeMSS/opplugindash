@@ -119,71 +119,10 @@ function buildPluginStat(item) {
 
 		// Build install graphs now
 		buildLineGraph(clone.find('[data-graph="installs"]'),['Installs'],[0],totalStats[item]);
-		/*buildPieChart(clone.find('[data-graph="versions"]'),['instances'],stats30d.plugins[item].versions);
-		return;*/
-
-		// build pie chart of versions numbers
-		let statKeys = [];
-		let statVals = [];
-		let tempStats = [];
-		for (const [key, value] of Object.entries(stats30d.plugins[item].versions)) {
-			tempStats.push({
-				'ver': key,
-				'val': value.instances
-			});
-		}
-		tempStats.sort(function(a, b) {
-			return b.val - a.val;
-		});
-		let newSet = tempStats.slice(0, 5)
-		let other = 0;
-		tempStats.slice(5).forEach(function(curVal) {
-			other += curVal.val;
-		});
-		if (other > 0) {
-			newSet.push({
-				"ver": "other",
-				"val": other
-			});
-		}
-		newSet.forEach(function(curVal) {
-			statKeys.push(curVal.ver);
-			statVals.push(curVal.val);
-		});
-		let dataSet = {
-			labels: statKeys,
-			datasets: [{
-				label: 'Totals for ' + item,
-				data: statVals,
-				hoverOffset: 4
-			}]
-		};
-		// Assign the graph
-		new Chart(clone.find('[data-graph="versions"]'), {
-			type: 'pie',
-			data: dataSet
-		});
+		buildPieChart(clone.find('[data-graph="versions"]'),Object.keys(stats30d.plugins[item].versions),'instances',stats30d.plugins[item].versions,5,'Release version');
 	}
 }
 
-function buildPieChart(target,datakeys,datavalues,limit){
-	console.log(datakeys);
-	console.log(datavalues)
-
-	var canvasitem = $('<canvas/>');
-	target.append(canvasitem);
-	new Chart(canvasitem, {
-		type: 'pie',
-		data: {
-			labels: datakeys,
-			datasets: [{
-				label: 'Totals for ',
-				data: datavalues,
-				hoverOffset: 4
-			}]
-		}
-	});
-}
 
 function buildInfo(item){
 	let litem = $(item).attr('href');
@@ -196,6 +135,7 @@ function buildInfo(item){
 			buildLineGraph($('#detailInfo'),['install_events_month','install_events_week'],['installbase.install_events_month','installbase.install_events_week'],localStats);
 			buildLineGraph($('#detailInfo'),['Open issues','Closed issues'],['ghissues.open','ghissues.closed'],localStats);
 			buildLineGraph($('#detailInfo'),['Stars'],['ghstars'],localStats);
+			buildPieChart($('#detailInfo'),Object.keys(stats30d.plugins[litem].versions),'instances',stats30d.plugins[litem].versions,0,'Release version');
 		}
 	})
 	return false;
@@ -212,20 +152,21 @@ function buildLineGraph(target,labels,datakeys,datasrc){
 	});
 
 	// assign the value
-	for (const [key, value] of Object.entries(datasrc)) {
-		labelsGen.push(key);
+	$.each(datasrc,function(keySrc,valueSrc){
+		labelsGen.push(keySrc);
 		$.each(datakeys,function(index, element){
 			if (typeof element == "number"){
-				if (Array.isArray(value)){
-					datasetsIns[index].data.push(value[element]);
+				if (Array.isArray(valueSrc)){
+					datasetsIns[index].data.push(valueSrc[element]);
 				}else{
-					datasetsIns[index].data.push(value);
+					datasetsIns[index].data.push(valueSrc);
 				}
 			}else{
-				datasetsIns[index].data.push(resolvePath(value,element));
+				datasetsIns[index].data.push(resolvePath(valueSrc,element));
 			}
 		})
-	}
+	});
+
 	target.append(canvasitem);
 
 	new Chart(canvasitem, {
@@ -233,6 +174,62 @@ function buildLineGraph(target,labels,datakeys,datasrc){
 		data: {
 			labels: labelsGen,
 			datasets: datasetsIns
+		}
+	});
+}
+
+
+function buildPieChart(target,dataLabels,keylookup,dataValues,limit,labeltxt){
+	let finalValues = [];
+	$.each(dataValues,function(datKey,datVal){
+		finalValues.push(resolvePath(datVal,keylookup))
+	});
+
+	// Limit entries shown
+	if (limit > 0){
+		// Sort them - largest first
+		let tempStats = [];
+		$.each(finalValues,function(dataKey,datVal){
+			tempStats.push([
+				dataLabels[dataKey],
+				datVal
+			]);
+		});
+		tempStats.sort(function(a, b) {
+			return b[1]-a[1];
+		});
+
+		// New set to be used
+		let newSet = tempStats.slice(0, limit);
+
+		// all the rest
+		let other = 0;
+		tempStats.slice(limit).forEach(function(curVal) {
+			other += curVal[1];
+		});
+		if (other > 0) {
+			newSet.push(['other',other]);
+		}
+		// Build the new entries
+		finalValues = [];
+		dataLabels = [];
+		newSet.forEach(function(curVal) {
+			dataLabels.push(curVal[0]);
+			finalValues.push(curVal[1]);
+		});
+	}
+
+	var canvasitem = $('<canvas/>');
+	target.append(canvasitem);
+	new Chart(canvasitem, {
+		type: 'pie',
+		data: {
+			labels: dataLabels,
+			datasets: [{
+				label: labeltxt,
+				data: finalValues,
+				hoverOffset: 4
+			}]
 		}
 	});
 }
