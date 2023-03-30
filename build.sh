@@ -13,11 +13,10 @@ statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 # local save for json files for uploading later on
 statsFile="${dataDir}${jsonDir}stats.json"
 pluginsFile="${dataDir}${jsonDir}plugins.json"
-echo $ghpageurl
 
 # previous files
-localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.json"
-localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.json"
+localStatsSrc="${ghpageurl}/${jsonDir}stats.json"
+localPluginsSrc="${ghpageurl}/${jsonDir}plugins.json"
 
 # users config file
 configFile="./config.json"
@@ -27,6 +26,7 @@ now=$(date +'%Y-%m-%d-%s 1')
 errormsg(){
 	echo -e "\e[0;31m"Error: "\e[0m""$1"
 }
+echo "Building data for ${ghpageurl}"
 
 # Config file found
 if [ ! -f $configFile ]; then
