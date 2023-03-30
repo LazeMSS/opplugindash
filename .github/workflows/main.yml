@@ -14,10 +14,10 @@ jobs:
           
       - name: Run script
         run: |
+          git branch
+          git pull
+          git checkout pages
+          git merge main
           ./build.sh
-      
-      - name: Commit changes
-        uses: EndBug/add-and-commit@v9.1.1
-        with:
-          message: 'Update data/*.json stats'
-          default_author: github_actions
+          git commit -m "Updating pages"
+          git push
