@@ -7,16 +7,16 @@ dataDir="./docs/"
 jsonDir="json/"
 
 # octoprint download dirs
-pluginSrc="https://plugins.octoprint.org/plugins.jsonx"
-statsSrc="https://data.octoprint.org/export/plugin_stats_30d.jsonx"
+pluginSrc="https://plugins.octoprint.org/plugins.json"
+statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 
 # local save for json files for uploading later on
 statsFile="${dataDir}${jsonDir}stats.json"
 pluginsFile="${dataDir}${jsonDir}plugins.json"
 
 # previous files
-localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.jsonxxx"
-localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.jsonxxxx"
+localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.json"
+localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.json"
 
 # users config file
 configFile="./config.json"
@@ -40,7 +40,7 @@ fi
 
 # check dir
 if [ ! -d "${dataDir}${jsonDir}" ]; then
-	echo "Creating folder ${dataDir}${jsonDir}"
+	echo "Creating local output folder ${dataDir}${jsonDir}"
 	mkdir -p "${dataDir}${jsonDir}"
 fi
 
@@ -56,13 +56,6 @@ if [ ! -f "$pluginsFile" ]; then
 	echo "{}" > $pluginsFile
 fi
 
-mapfile -t plugins < <(jq -cr '.[]' $configFile)
-if [ ${#plugins[@]} -eq 0 ]; then
-	errormsg "Zero entries found in $configFile"
-	exit 1
-fi
-echo "Found ${#plugins[@]} plugin(s) in $configFile"
-
 
 # get octoprint data
 curl -sS -f $pluginSrc --output plugins.json
@@ -77,6 +70,14 @@ if [ $retVal -ne 0 ]; then
 	errormsg "Failed to download ${statsSrc}"
 	exit $retVal;
 fi
+
+mapfile -t plugins < <(jq -cr '.[]' $configFile)
+if [ ${#plugins[@]} -eq 0 ]; then
+	errormsg "Zero entries found in $configFile"
+	exit 1
+fi
+echo "Found ${#plugins[@]} plugin(s) in $configFile"
+
 
 # get stats timestamp
 statsTime=$(jq -cr '._generated' stats.json 2>&1)
