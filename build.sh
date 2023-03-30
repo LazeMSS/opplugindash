@@ -84,7 +84,7 @@ fi
 
 # import totals from old data:
 # echo "{}" > $localTotals
-# echo "{}" > $localDetails
+echo "{}" > $localDetails
 # curl -sS -f "https://raw.githubusercontent.com/LazeMSS/plugins-dashboard/LazeMSS/data/stats.json" --output tmp_import.json
 # jq 'reduce (.uicustomizer.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"uicustomizer":.}' tmp_import.json > tmp_export.json
 # jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
@@ -159,7 +159,7 @@ jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localD
 		{
 			(.key): {
 				($now): {
-					"versions" : (.value.versions)
+					"versions" : (.value.versions | map_values(.instances))
 				}
 			}
 	}
