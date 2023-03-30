@@ -39,9 +39,9 @@ if ! command -v jq &> /dev/null; then
 fi
 
 # check dir
-if [ ! -d "$dataDir" ]; then
-	echo "Creating folder $dataDir"
-	mkdir -p "$dataDir"
+if [ ! -d "${dataDir}${jsonDir}" ]; then
+	echo "Creating folder ${dataDir}${jsonDir}"
+	mkdir -p "${dataDir}${jsonDir}"
 fi
 
 # get local stats
