@@ -60,6 +60,7 @@ HTTP_CODE=$(curl -sS -f "$curTotals" -w "%{http_code}" --output "$localTotals" 2
 retVal=$?
 if [ $retVal -ne 0 ]; then
 	if [[ $HTTP_CODE -ne "404" ]]; then
+		errormsg "Failed to download from ${curTotals}"
 		exit $?
 	fi
 	# Create a blank if no data ie 404 was found
@@ -71,6 +72,7 @@ HTTP_CODE=$(curl -sS -f "$curDetails" -w "%{http_code}" --output "$localDetails"
 retVal=$?
 if [ $retVal -ne 0 ]; then
 	if [[ $HTTP_CODE -ne "404" ]]; then
+		errormsg "Failed to download from ${curDetails}"
 		exit $?
 	fi
 	# Create a blank if no data ie 404 was found
