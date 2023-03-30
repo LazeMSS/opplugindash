@@ -15,8 +15,8 @@ statsFile="${dataDir}${jsonDir}stats.json"
 pluginsFile="${dataDir}${jsonDir}plugins.json"
 
 # previous files
-localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.json"
-localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.json"
+localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.jsonx"
+localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.jsonx"
 
 # users config file
 configFile="./config.json"
@@ -65,8 +65,8 @@ echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
 
 # get octoprint data
-curl -sS $pluginSrc --output plugins.json
-curl -sS $statsSrc --output stats.json
+curl -sS -f $pluginSrc --output plugins.json
+curl -sS -f $statsSrc --output stats.json
 
 # get stats timestamp
 statsTime=$(jq -cr '._generated' stats.json 2>&1)
