@@ -82,17 +82,17 @@ if [ $retVal -ne 0 ]; then
 fi
 ##############################################################
 
-# import totals from old data:
-# echo "{}" > $localTotals
-# echo "{}" > $localDetails
-# curl -sS -f "https://raw.githubusercontent.com/LazeMSS/plugins-dashboard/LazeMSS/data/stats.json" --output tmp_import.json
-# jq 'reduce (.uicustomizer.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"uicustomizer":.}' tmp_import.json > tmp_export.json
-# jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
-# mv tmp_merge.json $localTotals
+import totals from old data:
+echo "{}" > $localTotals
+echo "{}" > $localDetails
+curl -sS -f "https://raw.githubusercontent.com/LazeMSS/plugins-dashboard/LazeMSS/data/stats.json" --output tmp_import.json
+jq 'reduce (.uicustomizer.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"uicustomizer":.}' tmp_import.json > tmp_export.json
+jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
+mv tmp_merge.json $localTotals
 
-# jq 'reduce (.toptemp.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"toptemp":.}' tmp_import.json > tmp_export.json
-# jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
-# mv tmp_merge.json $localTotals
+jq 'reduce (.toptemp.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"toptemp":.}' tmp_import.json > tmp_export.json
+jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
+mv tmp_merge.json $localTotals
 
 #[Download stats from OctoPrint.org]##########################
 # get octoprint data

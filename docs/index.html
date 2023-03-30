@@ -26,16 +26,19 @@
 			</div>
 		</div>
 		<div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xxl-2 g-3 p-2" id="mainDash"></div>
+		<div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xxl-2 g-3 p-2" id="detailInfo">
+
+		</div>
 		<footer class="bg-body fixed-bottom d-flex flex-wrap justify-content-end align-items-center p-2 px-3 my-0 border-top">
 			<p class="text-muted mb-0">Updated <span id="lastudpated"></span></p>
 		</footer>
 	</div>
 	<script src="//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="//cdnjs.cloudflare.com/ajax/libs/cash/8.1.0/cash.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/cash/8.1.4/cash.min.js"></script>
 	<template id="mainDashTemplate">
 		<div class="col p-2">
 			<div class="card h-100 shadow-sm m-2">
-				<h5 class="card-header text-truncate position-relative"><span data-pinfo="title"></span><a class="position-absolute top-0 end-0 me-2 mt-2" data-pinfo="page" href="#" target="_blank"><i class="fs-6 bi bi-box-arrow-up-right"></i></a></h5>
+				<h5 class="card-header text-truncate position-relative"><a href="" onclick="javascript:return buildInfo(this);" data-pinfo="id">xx</a><span data-pinfo="title"></span><a class="position-absolute top-0 end-0 me-2 mt-2" data-pinfo="page" href="#" target="_blank"><i class="fs-6 bi bi-box-arrow-up-right"></i></a></h5>
 				<div class="card-body">
 					<div class="row">
 						<div class="col">

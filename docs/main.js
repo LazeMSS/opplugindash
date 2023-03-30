@@ -1,6 +1,7 @@
 /*
 Todo:
 	Cleanup graph
+	use $ instead of native js
 
 	Drilldown stats for:
 		installs, version and github stats pr. day
@@ -29,11 +30,11 @@ function toogleDarkMOde() {
 // ajax quick handler - needs an error handler
 function xhrJson(url, callbackOk) {
 	if (url.includes("?")){
-		url += "&time="
+		url += "&time=";
 	}else{
-		url += "?time="
+		url += "?time=";
 	}
-	url += Date.now();
+	url += now;
 	let xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -199,6 +200,42 @@ function buildPluginStat(item) {
 		}
 	}
 }
+
+function buildInfo(item){
+	let litem = $(item).attr('href');
+	xhrJson("json/details.json", function(data) {
+		if (litem in data){
+			localStats = data[litem];
+			$('#detailInfo').html('');
+			var canvasitem = $('<canvas/>');
+
+			let labels = [];
+			let hisval = [];
+			for (const [key, value] of Object.entries(localStats[item])) {
+				hiskeys.push(key);
+				hisval.push(value);
+			}
+			canvasitem.attr("id", "stats" + item);
+
+			var histDatSet = {
+				labels: hiskeys,
+				datasets: [{
+					label: "Total installbase",
+					data: hisval
+				}]
+			};
+
+			$('#detailInfo').append(canvasitem);
+
+			new Chart(document.querySelector("#histgraph_" + item), {
+				type: 'line',
+				data: histDatSet
+			});
+		}
+	})
+	return false;
+}
+
 
 // Search and object for a string path
 // https://stackoverflow.com/a/43849204
