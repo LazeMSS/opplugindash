@@ -12,6 +12,19 @@
         "closed": 62
       },
       "stars": 136
+    },
+    "2023-03-30-1680163467 1": {
+      "stats": {
+        "instances_month": 3625,
+        "install_events_month": 308,
+        "instances_week": 2779,
+        "install_events_week": 65
+      },
+      "issues": {
+        "open": 37,
+        "closed": 62
+      },
+      "stars": 136
     }
   },
   "uicustomizer": {
@@ -27,10 +40,36 @@
         "closed": 223
       },
       "stars": 148
+    },
+    "2023-03-30-1680163467 1": {
+      "stats": {
+        "instances_month": 10021,
+        "install_events_month": 1476,
+        "instances_week": 7048,
+        "install_events_week": 363
+      },
+      "issues": {
+        "open": 14,
+        "closed": 223
+      },
+      "stars": 148
     }
   },
   "toptemp": {
     "2023-03-30-1680163054 1": {
+      "stats": {
+        "instances_month": 2292,
+        "install_events_month": 207,
+        "instances_week": 1663,
+        "install_events_week": 55
+      },
+      "issues": {
+        "open": 6,
+        "closed": 70
+      },
+      "stars": 22
+    },
+    "2023-03-30-1680163467 1": {
       "stats": {
         "instances_month": 2292,
         "install_events_month": 207,

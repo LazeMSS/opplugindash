@@ -1,7 +1,7 @@
 {
   "uicustomizer": {
     "2023-03-30": {
-      "instances": 10021,
+      "instances": 10024,
       "versions": {
         "0.1.0.0": {
           "instances": 3
@@ -88,7 +88,7 @@
           "instances": 128
         },
         "0.1.9.0": {
-          "instances": 7884
+          "instances": 7882
         },
         "0.1.9.1": {
           "instances": 2418
@@ -97,16 +97,16 @@
           "instances": 4149
         },
         "0.1.9.4": {
-          "instances": 3062
+          "instances": 3069
         }
       },
-      "install_events": 1476,
+      "install_events": 1479,
       "uninstall_events": 140
     }
   },
   "mqtt": {
     "2023-03-30": {
-      "instances": 3625,
+      "instances": 3624,
       "versions": {
         "0.2": {
           "instances": 1
@@ -127,7 +127,7 @@
           "instances": 8
         },
         "0.8.7": {
-          "instances": 40
+          "instances": 39
         },
         "0.8.9": {
           "instances": 9
@@ -139,7 +139,7 @@
   },
   "toptemp": {
     "2023-03-30": {
-      "instances": 2292,
+      "instances": 2291,
       "versions": {
         "0.0.0.2": {
           "instances": 3
@@ -166,7 +166,7 @@
           "instances": 3
         },
         "0.0.1.7": {
-          "instances": 595
+          "instances": 594
         },
         "0.0.1.8": {
           "instances": 1
@@ -184,7 +184,7 @@
           "instances": 1625
         }
       },
-      "install_events": 207,
+      "install_events": 208,
       "uninstall_events": 17
     }
   }
