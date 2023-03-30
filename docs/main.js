@@ -55,7 +55,7 @@ function loadData(refresh) {
 			xhrJson("https://data.octoprint.org/export/plugin_stats_30d.json", function(data) {
 				stats30d = data;
 				// Get history data and handle
-				xhrJson("json/stats.json", function(data) {
+				xhrJson("json/totals.json", function(data) {
 					localStats = data;
 					buildStats();
 				})

@@ -67,6 +67,8 @@ if [ $retVal -ne 0 ]; then
 	echo "Found no existing data in $curTotals"
 	echo "{}" > $localTotals
 fi
+echo "Found no existing data in $curTotals"
+	echo "{}" > $localTotals
 
 HTTP_CODE=$(curl -sS -f "$curDetails" -w "%{http_code}" --output "$localDetails" 2> /dev/null)
 retVal=$?
@@ -79,6 +81,8 @@ if [ $retVal -ne 0 ]; then
 	echo "Found no existing data in $curDetails"
 	echo "{}" > $localDetails
 fi
+echo "Found no existing data in $curDetails"
+	echo "{}" > $localDetails
 ##############################################################
 
 
@@ -106,14 +110,24 @@ if [ ${#plugins[@]} -eq 0 ]; then
 fi
 echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
-# get stats timestamp
-statsTime=$(jq -cr '._generated' tmp_OPstats.json 2>&1)
-statsTime=$(date -d "$statsTime" +"%Y-%m-%d")
 
 # convert config to object to make it parsable
 configMap=$(jq -c '[ .[] | {key: (.), value: null} ] | from_entries' config.json)
 
-# build generic stats/github stats
+# build generic totals
+jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localTotals" '
+	[
+	.plugins | to_entries | .[] | select(.key | in($config)) |
+		{
+			(.key): {
+				($now): (.value.instances)
+			}
+	}
+	] | reduce .[] as $add ($result[0]; . * $add)' tmp_OPstats.json > tmp_merge.json
+# Copy to final output
+mv tmp_merge.json $localTotals
+
+# build details part 1
 jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localDetails" '
 	[
 		.[] | select(.id | in($config)) |
@@ -121,27 +135,30 @@ jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localD
 			(.id): {
 				($now): {
 						"stats": (.stats),
-						"issues": (.github.issues),
-						"stars": (.github.stars)
+						"ghissues": (.github.issues),
+						"ghstars": (.github.stars)
 						}
 			}
 		}
 	] | reduce .[] as $add ($result[0]; . * $add)' tmp_OPplugins.json > tmp_merge.json
-mv tmp_merge.json "$localDetails"
+# Copy to final output
+mv tmp_merge.json $localDetails
 
 # Build version stats
-jq -c --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile result "$localTotals" '
+jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localDetails" '
 	[
 	.plugins | to_entries | .[] | select(.key | in($config)) |
 		{
 			(.key): {
-				($statsTime): (.value)
+				($now): {
+					"versions" : (.value.versions)
+				}
 			}
 	}
 	] | reduce .[] as $add ($result[0]; . * $add)' tmp_OPstats.json > tmp_merge.json
 
 # Copy to final output
-mv tmp_merge.json $localTotals
+mv tmp_merge.json $localDetails
 
 # cleanup
 rm tmp_* 2> /dev/null
