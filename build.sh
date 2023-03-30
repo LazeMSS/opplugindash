@@ -1,17 +1,18 @@
 #!/bin/bash
 
 # output data dir for json local storage
-dataDir="./docs/json/"
+dataDir="./docs/"
+jsonDir="json/"
 
-# local json files
-statsFile="${dataDir}stats.json"
-pluginsFile="${dataDir}plugins.json"
+# local save for json dirs
+statsFile="${dataDir}${jsonDir}stats.json"
+pluginsFile="${dataDir}${jsonDir}plugins.json"
 
-# octoprint download dirs
-localStatsSrc="https://lazemss.github.io/opplugindash/data/stats.json"
-localPluginsSrc="https://lazemss.github.io/opplugindash/data/plugins.json"
-echo ${{ env.url }}
-echo ${{ env.name }}
+# previous files
+echo ${env.url}
+echo ${env.name}
+localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}/stats.json"
+localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}/plugins.json"
 
 # octoprint download dirs
 pluginSrc="https://plugins.octoprint.org/plugins.json"
