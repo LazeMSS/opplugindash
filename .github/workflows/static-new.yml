@@ -33,6 +33,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Setup Pages
         uses: actions/configure-pages@v3
+      - name: Run script
+        run: |
+          ./build.sh
+          ls docs/json/ -la 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
