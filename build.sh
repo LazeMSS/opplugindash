@@ -67,8 +67,6 @@ if [ $retVal -ne 0 ]; then
 	echo "Found no existing data in $curTotals"
 	echo "{}" > $localTotals
 fi
-echo "Found no existing data in $curTotals"
-	echo "{}" > $localTotals
 
 HTTP_CODE=$(curl -sS -f "$curDetails" -w "%{http_code}" --output "$localDetails" 2> /dev/null)
 retVal=$?
@@ -81,8 +79,6 @@ if [ $retVal -ne 0 ]; then
 	echo "Found no existing data in $curDetails"
 	echo "{}" > $localDetails
 fi
-echo "Found no existing data in $curDetails"
-	echo "{}" > $localDetails
 ##############################################################
 
 
