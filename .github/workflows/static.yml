@@ -37,7 +37,7 @@ jobs:
       - name: Run script
         run: |
           ./build.sh
-          ls json/ -la 
+          ls docs/json/ -la 
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
