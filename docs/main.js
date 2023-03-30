@@ -11,11 +11,14 @@ const configFile = "json/config.json"
 
 // Store data for faster builds
 var myPlugins = [];
-var stats30d = {};
 var pluginsinfo = {};
+var stats30d = {};
+
 var localStats = {};
+
 // Graph resize timer
 var resizeTimer = null;
+const now = new Date().toISOString().substr(0, 10);
 
 function toogleDarkMOde() {
 	$('i.modeicon').toggleClass('bi-moon bi-sun');
@@ -25,6 +28,12 @@ function toogleDarkMOde() {
 
 // ajax quick handler - needs an error handler
 function xhrJson(url, callbackOk) {
+	if (url.includes("?")){
+		url += "&time="
+	}else{
+		url += "?time="
+	}
+	url += Date.now();
 	let xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
@@ -47,6 +56,7 @@ function loadData(refresh) {
 	// Get main config
 	xhrJson(configFile, function(data) {
 		myPlugins = data;
+
 		// Get primary plugin info for names etc
 		xhrJson("https://plugins.octoprint.org/plugins.json", function(data) {
 			pluginsinfo = data;
@@ -165,6 +175,7 @@ function buildPluginStat(item) {
 			canvasHis.remove();
 			canvasHis = null;
 		}
+
 		// add the item
 		document.querySelector('#mainDash').appendChild(clone);
 		// Assign the graph

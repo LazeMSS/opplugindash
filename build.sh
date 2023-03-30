@@ -142,7 +142,7 @@ jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localD
 		{
 			(.id): {
 				($now): {
-					"stats": (.stats),
+					"installbase": (.stats),
 					"ghissues": (.github.issues),
 					"ghstars": (.github.stars)
 				}
