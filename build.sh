@@ -1,22 +1,22 @@
 #!/bin/bash
 
-# output data dir for json local storage
+# local repo folder for www content
 dataDir="./docs/"
+
+# where should we store the json relative to the datadir
 jsonDir="json/"
-
-# local save for json dirs
-statsFile="${dataDir}${jsonDir}stats.json"
-pluginsFile="${dataDir}${jsonDir}plugins.json"
-
-# previous files
-echo ${env.url}
-echo ${env.name}
-localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}/stats.json"
-localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}/plugins.json"
 
 # octoprint download dirs
 pluginSrc="https://plugins.octoprint.org/plugins.json"
 statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
+
+# local save for json files for uploading later on
+statsFile="${dataDir}${jsonDir}stats.json"
+pluginsFile="${dataDir}${jsonDir}plugins.json"
+
+# previous files
+localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.json"
+localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.json"
 
 # users config file
 configFile="./config.json"
@@ -44,18 +44,17 @@ if [ ! -d "${dataDir}${jsonDir}" ]; then
 	mkdir -p "${dataDir}${jsonDir}"
 fi
 
-# get local stats
+# get current files local gh pages
 curl -sS -f "$localPluginsSrc" --output "$statsFile"
 curl -sS -f "$localStatsSrc" --output "$pluginsFile"
 
-# Build new files
+# Build new files if nothing was found
 if [ ! -f "$statsFile" ]; then
 	echo "{}" > $statsFile
 fi
 if [ ! -f "$pluginsFile" ]; then
 	echo "{}" > $pluginsFile
 fi
-
 
 mapfile -t plugins < <(jq -cr '.[]' $configFile)
 if [ ${#plugins[@]} -eq 0 ]; then
@@ -64,35 +63,17 @@ if [ ${#plugins[@]} -eq 0 ]; then
 fi
 echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
-# get stats
+
+# get octoprint data
 curl -sS $pluginSrc --output plugins.json
 curl -sS $statsSrc --output stats.json
 
+# get stats timestamp
 statsTime=$(jq -cr '._generated' stats.json 2>&1)
 statsTime=$(date -d "$statsTime" +"%Y-%m-%d")
 
-# for pluginid in "${plugins[@]}"
-# do
-# 	echo "Gettings generic stats for $pluginid"
-# 	if grep -q '"id": "'"$pluginid"'"' plugins.json; then
-
-# 		# build generic stats/github stats
-# 		jq '.[]| select(.id=="'"$pluginid"'")  | {"stats":.stats, "issues":.github|.issues , "stars":.github.stars} | {"'"${pluginid}"'" : {"'"$now"'": .}}' plugins.json > tmp_stats.json
-# 		jq -s '.[0] * .[1]' tmp_stats.json $pluginsFile > tmp_merge.json
-# 		mv tmp_merge.json $pluginsFile
-
-# 		# Build version stats
-# 		jq '.plugins.'${pluginid} stats.json | jq -c '{"'"${pluginid}"'" : {"'"$statsTime"'": .}}' > tmp_stats.json
-# 		jq -s '.[0] * .[1]' tmp_stats.json $statsFile > tmp_merge.json
-# 		mv tmp_merge.json $statsFile
-# 	else
-# 		errormsg "Could not locate $pluginid in $pluginSrc"
-# 	fi
-# done
-
+# convert config to object to make it parsable
 configMap=$(jq -c '[ .[] | {key: (.), value: null} ] | from_entries' config.json)
-
-# No checking whether config values exist in plugins.json here
 
 # build generic stats/github stats
 jq --argjson config "$configMap" --arg now "$now" --slurpfile result "$pluginsFile" '
@@ -120,6 +101,8 @@ jq --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile result
 			}
 	}
 	] | reduce .[] as $add ($result[0]; . * $add)' stats.json > tmp_merge.json
+
+# Copy to final output
 mv tmp_merge.json $statsFile
 
 rm plugins.json stats.json tmp_* 2> /dev/null
