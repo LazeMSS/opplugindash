@@ -10,8 +10,8 @@ pluginsFile="${dataDir}plugins.json"
 # octoprint download dirs
 localStatsSrc="https://lazemss.github.io/opplugindash/data/stats.json"
 localPluginsSrc="https://lazemss.github.io/opplugindash/data/plugins.json"
-echo $url
-echo $name
+echo ${{ env.url }}
+echo ${{ env.name }}
 
 # octoprint download dirs
 pluginSrc="https://plugins.octoprint.org/plugins.json"
