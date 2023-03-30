@@ -9,6 +9,9 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+  schedule:
+    - cron: "5 0 * * *"
+
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -36,7 +39,6 @@ jobs:
       - name: Run script
         run: |
           ./build.sh
-          ls docs/json/ -la 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
