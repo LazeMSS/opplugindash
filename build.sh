@@ -37,7 +37,7 @@ fi
 
 # get local stats
 curl -sS -f "$localPluginsSrc" --output "$statsFile"
-curl -sS -f "$localStatsSr"c --output "$pluginsFile"
+curl -sS -f "$localStatsSrc" --output "$pluginsFile"
 ls docs/data/
 
 # Build new files
