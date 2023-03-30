@@ -108,4 +108,4 @@ mv tmp_merge.json $statsFile
 rm plugins.json stats.json tmp_* 2> /dev/null
 
 # copy config file to the website
-cp $configFile ${dataDir}config.json
+cp $configFile ${dataDir}${jsonDir}config.json
