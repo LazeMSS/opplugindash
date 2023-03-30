@@ -1,11 +1,19 @@
 #!/bin/bash
-# output data dir
+
+# output data dir for json local storage
 dataDir="./docs/json/"
+
+# local json files
 statsFile="${dataDir}stats.json"
 pluginsFile="${dataDir}plugins.json"
+
+# octoprint download dirs
 localStatsSrc="https://lazemss.github.io/opplugindash/data/stats.json"
 localPluginsSrc="https://lazemss.github.io/opplugindash/data/plugins.json"
+echo $url
+echo $name
 
+# octoprint download dirs
 pluginSrc="https://plugins.octoprint.org/plugins.json"
 statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 

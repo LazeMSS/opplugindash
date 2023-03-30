@@ -1,8 +1,5 @@
 /*
 Todo:
-	Action for downloading stats daily
-		Shell https://stedolan.github.io/jq/
-
 	Cleanup graph
 
 	Drilldown stats for:
