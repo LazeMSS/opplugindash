@@ -1,5 +1,15 @@
 #!/bin/bash
+errormsg(){
+	echo -e "\e[0;31m"Error: "\e[0m""$1"
+}
 
+# check for main url
+if [ -z ${ghpageurl+x} ]; then
+	errormsg "Unable to find the gh page url"
+	exit 1
+fi
+
+#[Local variables]#############################################
 # local repo folder for www content
 dataDir="./docs/"
 
@@ -10,27 +20,25 @@ jsonDir="json/"
 pluginSrc="https://plugins.octoprint.org/plugins.json"
 statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 
-# local save for json files for uploading later on
-statsFile="${dataDir}${jsonDir}stats.json"
-pluginsFile="${dataDir}${jsonDir}plugins.json"
+# previous files from the website
+curTotals="${ghpageurl}/${jsonDir}totals.json"
+curDetails="${ghpageurl}/${jsonDir}details.json"
 
-# previous files
-localStatsSrc="${ghpageurl}/${jsonDir}stats.json"
-localPluginsSrc="${ghpageurl}/${jsonDir}plugins.json"
+# local save for json files for uploading later on
+localTotals="${dataDir}${jsonDir}totals.json"
+localDetails="${dataDir}${jsonDir}details.json"
 
 # users config file
 configFile="./config.json"
 
 now=$(date +'%Y-%m-%d-%s 1')
+##############################################################
 
-errormsg(){
-	echo -e "\e[0;31m"Error: "\e[0m""$1"
-}
 echo "Building data for ${ghpageurl}"
 
 # Config file found
-if [ ! -f $configFile ]; then
-	errormsg "Unable to find plugin configfile: $configFile"
+if [ ! -f $configFile ] || [ ! -s "$configFile" ]; then
+	errormsg "Unable to find valid plugin configfile: $configFile"
 	exit 1
 fi
 
@@ -45,33 +53,48 @@ if [ ! -d "${dataDir}${jsonDir}" ]; then
 	mkdir -p "${dataDir}${jsonDir}"
 fi
 
+
+#[Get local site stats for merging]###########################
 # get current files local gh page data
-curl -sS "$localPluginsSrc" --output "$pluginsFile"
-curl -sS "$localStatsSrc" --output "$statsFile"
-
-# Build new files if nothing was found
-if [ ! -f "$statsFile" ] || [ ! -s "$statsFile" ]; then
-	echo "Found no existing data in $localStatsSrc"
-	echo "{}" > $statsFile
-fi
-if [ ! -f "$pluginsFile" ] || [ ! -s "$pluginsFile" ]; then
-	echo "Found no existing data in $localPluginsSrc"
-	echo "{}" > $pluginsFile
+HTTP_CODE=$(curl -sS -f "$curTotals" -w "%{http_code}" --output "$localTotals" 2> /dev/null)
+retVal=$?
+if [ $retVal -ne 0 ]; then
+	if [[ $HTTP_CODE -ne "404" ]]; then
+		exit $?
+	fi
+	# Create a blank if no data ie 404 was found
+	echo "Found no existing data in $curTotals"
+	echo "{}" > $localTotals
 fi
 
+HTTP_CODE=$(curl -sS -f "$curDetails" -w "%{http_code}" --output "$localDetails" 2> /dev/null)
+retVal=$?
+if [ $retVal -ne 0 ]; then
+	if [[ $HTTP_CODE -ne "404" ]]; then
+		exit $?
+	fi
+	# Create a blank if no data ie 404 was found
+	echo "Found no existing data in $curDetails"
+	echo "{}" > $localDetails
+fi
+##############################################################
+
+
+#[Download stats from OctoPrint.org]##########################
 # get octoprint data
-curl -sS -f $pluginSrc --output plugins.json
+curl -sS -f $pluginSrc --output tmp_OPplugins.json
 retVal=$?
 if [ $retVal -ne 0 ]; then
-	errormsg "Failed to download ${pluginSrc}"
+	errormsg "Failed to download from ${pluginSrc}"
 	exit $retVal;
 fi
-curl -sS -f $statsSrc --output stats.json
+curl -sS -f $statsSrc --output tmp_OPstats.json
 retVal=$?
 if [ $retVal -ne 0 ]; then
-	errormsg "Failed to download ${statsSrc}"
+	errormsg "Failed to download from ${statsSrc}"
 	exit $retVal;
 fi
+##############################################################
 
 # check the config file for errors
 mapfile -t plugins < <(jq -cr '.[]' $configFile)
@@ -82,14 +105,14 @@ fi
 echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
 # get stats timestamp
-statsTime=$(jq -cr '._generated' stats.json 2>&1)
+statsTime=$(jq -cr '._generated' tmp_OPstats.json 2>&1)
 statsTime=$(date -d "$statsTime" +"%Y-%m-%d")
 
 # convert config to object to make it parsable
 configMap=$(jq -c '[ .[] | {key: (.), value: null} ] | from_entries' config.json)
 
 # build generic stats/github stats
-jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$pluginsFile" '
+jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localDetails" '
 	[
 		.[] | select(.id | in($config)) |
 		{
@@ -101,11 +124,11 @@ jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$plugin
 						}
 			}
 		}
-	] | reduce .[] as $add ($result[0]; . * $add)' plugins.json > tmp_merge.json
-mv tmp_merge.json "$pluginsFile"
+	] | reduce .[] as $add ($result[0]; . * $add)' tmp_OPplugins.json > tmp_merge.json
+mv tmp_merge.json "$localDetails"
 
 # Build version stats
-jq -c --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile result "$statsFile" '
+jq -c --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile result "$localTotals" '
 	[
 	.plugins | to_entries | .[] | select(.key | in($config)) |
 		{
@@ -113,12 +136,13 @@ jq -c --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile res
 				($statsTime): (.value)
 			}
 	}
-	] | reduce .[] as $add ($result[0]; . * $add)' stats.json > tmp_merge.json
+	] | reduce .[] as $add ($result[0]; . * $add)' tmp_OPstats.json > tmp_merge.json
 
 # Copy to final output
-mv tmp_merge.json $statsFile
+mv tmp_merge.json $localTotals
 
-rm plugins.json stats.json tmp_* 2> /dev/null
+# cleanup
+rm tmp_* 2> /dev/null
 
-# copy config file to the website
+# copy config file to the website for loading
 cp $configFile ${dataDir}${jsonDir}config.json
