@@ -7,7 +7,7 @@ Todo:
 */
 
 //paths to json files
-const configFile = "data/config.json"
+const configFile = "json/config.json"
 
 // Store data for faster builds
 var myPlugins = [];
@@ -55,7 +55,7 @@ function loadData(refresh) {
 			xhrJson("https://data.octoprint.org/export/plugin_stats_30d.json", function(data) {
 				stats30d = data;
 				// Get history data and handle
-				xhrJson("data/plugins.json", function(data) {
+				xhrJson("json/plugins.json", function(data) {
 					localPlugins = data;
 					buildStats();
 				})
