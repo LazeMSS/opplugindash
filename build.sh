@@ -31,7 +31,7 @@ localDetails="${dataDir}${jsonDir}details.json"
 # users config file
 configFile="./config.json"
 
-now=$(date +'%Y-%m-%d-%s 1')
+now=$(date +'%Y-%m-%d')
 ##############################################################
 
 echo "Building data for ${ghpageurl}"
@@ -68,6 +68,7 @@ if [ $retVal -ne 0 ]; then
 	echo "{}" > $localTotals
 fi
 
+
 HTTP_CODE=$(curl -sS -f "$curDetails" -w "%{http_code}" --output "$localDetails" 2> /dev/null)
 retVal=$?
 if [ $retVal -ne 0 ]; then
@@ -81,6 +82,16 @@ if [ $retVal -ne 0 ]; then
 fi
 ##############################################################
 
+# import totals from old data:
+echo "{}" > $localTotals
+curl -sS -f "https://raw.githubusercontent.com/LazeMSS/plugins-dashboard/LazeMSS/data/stats.json" --output tmp_import.json
+jq 'reduce (.uicustomizer.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"uicustomizer":.}' tmp_import.json > tmp_export.json
+jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
+mv tmp_merge.json $localTotals
+
+jq 'reduce (.toptemp.history | .[] | { (.date) : .total}) as $item ({}; . + $item)|{"toptemp":.}' tmp_import.json > tmp_export.json
+jq -s '.[0] * .[1]' tmp_export.json $localTotals > tmp_merge.json
+mv tmp_merge.json $localTotals
 
 #[Download stats from OctoPrint.org]##########################
 # get octoprint data
@@ -130,10 +141,10 @@ jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$localD
 		{
 			(.id): {
 				($now): {
-						"stats": (.stats),
-						"ghissues": (.github.issues),
-						"ghstars": (.github.stars)
-						}
+					"stats": (.stats),
+					"ghissues": (.github.issues),
+					"ghstars": (.github.stars)
+				}
 			}
 		}
 	] | reduce .[] as $add ($result[0]; . * $add)' tmp_OPplugins.json > tmp_merge.json
