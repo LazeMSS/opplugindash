@@ -3,25 +3,20 @@
 dataDir="./docs/data/"
 statsFile="${dataDir}stats.json"
 pluginsFile="${dataDir}plugins.json"
-
-# user config file
-configFile="./config.json"
+localStatsSrc="https://lazemss.github.io/opplugindash/data/stats.json"
+localPluginsSrc="https://lazemss.github.io/opplugindash/data/plugins.json"
 
 pluginSrc="https://plugins.octoprint.org/plugins.json"
 statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 
-if [[ -z "${GITHUB_REPOSITORY_OWNER}" ]]; then
-	curUser=$USER
-else
-	curUser=$GITHUB_REPOSITORY_OWNER
-fi
+# users config file
+configFile="./config.json"
+
 now=$(date +'%Y-%m-%d-%s 1')
 
 errormsg(){
 	echo -e "\e[0;31m"Error: "\e[0m""$1"
 }
-
-echo "Running as user (GitHub repo owner): $curUser"
 
 # Config file found
 if [ ! -f $configFile ]; then
@@ -40,25 +35,9 @@ if [ ! -d "$dataDir" ]; then
 	mkdir -p "$dataDir"
 fi
 
-# Check if we have the right user
-makeNewUser=true
-if [ -f "repo_owner" ]; then
-	read -r fileRepoOwner < repo_owner
-	if [ "$fileRepoOwner" == "$curUser" ]; then
-		makeNewUser=false
-	fi
-fi
-
-# Reset on new user
-if $makeNewUser; then
-	echo "New user running - will clean stats!"
-
-	mv "$statsFile" "${statsFile}.bak" 2> /dev/null
-	mv "$pluginsFile" "${pluginsFile}.bak" 2> /dev/null
-
-	# assign the new user
-	echo "$curUser" > repo_owner
-fi
+# get local stats
+curl -sS -f $localPluginsSrc --output $statsFile
+curl -sS -f $localStatsSrc --output $pluginsFile
 
 # Build new files
 if [ ! -f "$statsFile" ]; then
@@ -67,7 +46,6 @@ fi
 if [ ! -f "$pluginsFile" ]; then
 	echo "{}" > $pluginsFile
 fi
-
 
 mapfile -t plugins < <(jq -cr '.[]' $configFile)
 if [ ${#plugins[@]} -eq 0 ]; then
