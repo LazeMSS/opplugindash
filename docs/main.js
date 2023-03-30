@@ -151,7 +151,7 @@ function buildPluginStat(item) {
 			let hisval = [];
 			for (const [key, value] of Object.entries(localStats[item])) {
 				hiskeys.push(key);
-				hisval.push(value.stats.instances_month);
+				hisval.push(value);
 			}
 			canvasHis.setAttribute("id", "histgraph_" + item);
 			var histDatSet = {
