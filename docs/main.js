@@ -94,28 +94,33 @@ function buildStats() {
 function buildPluginStat(item) {
 	item = item.toLowerCase();
 	if (item in stats30d.plugins) {
+
 		// Basic template field from data
-		let template = document.querySelector('#mainDashTemplate');
-		let clone = template.content.cloneNode(true);
 		// Find all plugin info data
-		let templateFiller = clone.querySelectorAll('[data-pinfo]');
-		templateFiller.forEach(function(curVal, curInd, listObj) {
+		let clone = $('#mainDashTemplate').clone().contents();
+
+		clone.find('[data-pinfo]').each(function(curInd,element) {
 			// Lookup the value in the tree
-			let itemVal = resolvePath(pluginsinfo[item], curVal.getAttribute('data-pinfo'), null);
+			let itemVal = resolvePath(pluginsinfo[item], $(this).attr('data-pinfo'), null);
 			// Nothing to fil - then delete the template item
 			if (itemVal == null || itemVal === false) {
-				listObj[curInd].remove();
+				$(this).remove();
 				return;
 			}
 
 			// Set urls if a href tags
-			if (listObj[curInd].tagName == "A") {
-				listObj[curInd].setAttribute("href", itemVal.replace(/\/archive\/(.*)/, ''));
+			if (this.tagName == "A") {
+				$(this).attr("href", itemVal.replace(/\/archive\/(.*)/, ''));
 			} else {
-				listObj[curInd].innerHTML = itemVal;
+				$(this).html(itemVal);
 			}
 		});
+		$('#mainDash').append(clone);
 
+		// Build install graphs now
+		buildLineGraph(clone.find('[data-graph="installs"]'),['Installs'],[0],totalStats[item]);
+		/*buildPieChart(clone.find('[data-graph="versions"]'),['instances'],stats30d.plugins[item].versions);
+		return;*/
 
 		// build pie chart of versions numbers
 		let statKeys = [];
@@ -145,8 +150,6 @@ function buildPluginStat(item) {
 			statKeys.push(curVal.ver);
 			statVals.push(curVal.val);
 		});
-		let canvas = clone.querySelectorAll("canvas[data-graph=\"versions\"]")[0];
-		canvas.setAttribute("id", "versiongraph_" + item);
 		let dataSet = {
 			labels: statKeys,
 			datasets: [{
@@ -155,51 +158,31 @@ function buildPluginStat(item) {
 				hoverOffset: 4
 			}]
 		};
-
-		// Build graph with install base
-		let canvasHis = clone.querySelectorAll("canvas[data-graph=\"history\"]")[0];
-		if (item in totalStats) {
-			let hiskeys = [];
-			let hisval = [];
-			for (const [key, value] of Object.entries(totalStats[item])) {
-				hiskeys.push(key);
-				hisval.push(value);
-			}
-			canvasHis.setAttribute("id", "histgraph_" + item);
-			var histDatSet = {
-				labels: hiskeys,
-				datasets: [{
-					label: "Total installbase",
-					data: hisval
-				}]
-			};
-		} else {
-			canvasHis.remove();
-			canvasHis = null;
-		}
-
-		// add the item
-		document.querySelector('#mainDash').appendChild(clone);
 		// Assign the graph
-		new Chart(document.querySelector("#versiongraph_" + item), {
+		new Chart(clone.find('[data-graph="versions"]'), {
 			type: 'pie',
 			data: dataSet
 		});
-		// Assign the graph
-		if (canvasHis != null) {
-			new Chart(document.querySelector("#histgraph_" + item), {
-				type: 'line',
-				data: histDatSet,
-				options: {
-					plugins: {
-						legend: {
-							position: "bottom"
-						}
-					}
-				}
-			});
-		}
 	}
+}
+
+function buildPieChart(target,datakeys,datavalues,limit){
+	console.log(datakeys);
+	console.log(datavalues)
+
+	var canvasitem = $('<canvas/>');
+	target.append(canvasitem);
+	new Chart(canvasitem, {
+		type: 'pie',
+		data: {
+			labels: datakeys,
+			datasets: [{
+				label: 'Totals for ',
+				data: datavalues,
+				hoverOffset: 4
+			}]
+		}
+	});
 }
 
 function buildInfo(item){
@@ -208,17 +191,17 @@ function buildInfo(item){
 		if (litem in data){
 			localStats = data[litem];
 			$('#detailInfo').html('');
-			buildLineGraph($('#detailInfo'),['Installs'],[0],'totalinstall_'+litem,totalStats[litem]);
-			buildLineGraph($('#detailInfo'),['instances_month','instances_week'],['installbase.instances_month','installbase.instances_week'],'instances_'+litem,localStats);
-			buildLineGraph($('#detailInfo'),['install_events_month','install_events_week'],['installbase.install_events_month','installbase.install_events_week'],'installs_'+litem,localStats);
-			buildLineGraph($('#detailInfo'),['Open issues','Closed issues'],['ghissues.open','ghissues.closed'],'ghissues_'+litem,localStats);
-			buildLineGraph($('#detailInfo'),['Stars'],['ghstars'],'ghstars'+litem,localStats);
+			buildLineGraph($('#detailInfo'),['Installs'],[0],totalStats[litem]);
+			buildLineGraph($('#detailInfo'),['instances_month','instances_week'],['installbase.instances_month','installbase.instances_week'],localStats);
+			buildLineGraph($('#detailInfo'),['install_events_month','install_events_week'],['installbase.install_events_month','installbase.install_events_week'],localStats);
+			buildLineGraph($('#detailInfo'),['Open issues','Closed issues'],['ghissues.open','ghissues.closed'],localStats);
+			buildLineGraph($('#detailInfo'),['Stars'],['ghstars'],localStats);
 		}
 	})
 	return false;
 }
 
-function buildLineGraph(target,labels,datakeys,idstr,datasrc){
+function buildLineGraph(target,labels,datakeys,datasrc){
 	var canvasitem = $('<canvas/>');
 	let datasetsIns = [];
 	let labelsGen = [];
@@ -243,7 +226,6 @@ function buildLineGraph(target,labels,datakeys,idstr,datasrc){
 			}
 		})
 	}
-	canvasitem.attr("id", idstr);
 	target.append(canvasitem);
 
 	new Chart(canvasitem, {
