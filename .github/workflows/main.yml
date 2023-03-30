@@ -11,17 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v3.4.0
         name: Checkout repo
-        with:
-          ref: 'pages'
           
       - name: Run script
         run: |
-          git branch
-          git pull
-          git merge origin/main
           ./build.sh
-          # git commit -m "Updating pages"
-          # git push
 
       - name: Commit changes
         uses: EndBug/add-and-commit@v9.1.1
