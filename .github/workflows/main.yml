@@ -20,5 +20,9 @@ jobs:
           git pull
           git merge origin/main
           ./build.sh
-          git commit -m "Updating pages"
-          git push
+          # git commit -m "Updating pages"
+          # git push
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v2
