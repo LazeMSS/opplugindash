@@ -7,8 +7,8 @@ dataDir="./docs/"
 jsonDir="json/"
 
 # octoprint download dirs
-pluginSrc="https://plugins.octoprint.org/plugins.json"
-statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
+pluginSrc="https://plugins.octoprint.org/plugins.jsonx"
+statsSrc="https://data.octoprint.org/export/plugin_stats_30d.jsonx"
 
 # local save for json files for uploading later on
 statsFile="${dataDir}${jsonDir}stats.json"
@@ -45,8 +45,8 @@ if [ ! -d "${dataDir}${jsonDir}" ]; then
 fi
 
 # get current files local gh pages
-curl -sS -f "$localPluginsSrc" --output "$statsFile"
-curl -sS -f "$localStatsSrc" --output "$pluginsFile"
+curl -sS "$localPluginsSrc" --output "$statsFile"
+curl -sS "$localStatsSrc" --output "$pluginsFile"
 
 # Build new files if nothing was found
 if [ ! -f "$statsFile" ]; then
@@ -66,7 +66,13 @@ echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
 # get octoprint data
 curl -sS -f $pluginSrc --output plugins.json
+if [ $? -ne 0 ]; then
+	errormsg "Failed to download ${pluginSrc}"
+fi
 curl -sS -f $statsSrc --output stats.json
+if [ $? -ne 0 ]; then
+	errormsg "Failed to download ${statsSrc}"
+fi
 
 # get stats timestamp
 statsTime=$(jq -cr '._generated' stats.json 2>&1)
