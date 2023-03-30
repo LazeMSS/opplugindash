@@ -36,8 +36,9 @@ if [ ! -d "$dataDir" ]; then
 fi
 
 # get local stats
-curl -sS -f $localPluginsSrc --output $statsFile
-curl -sS -f $localStatsSrc --output $pluginsFile
+curl -sS -f "$localPluginsSrc" --output "$statsFile"
+curl -sS -f "$localStatsSr"c --output "$pluginsFile"
+ls docs/data/
 
 # Build new files
 if [ ! -f "$statsFile" ]; then
@@ -46,6 +47,9 @@ fi
 if [ ! -f "$pluginsFile" ]; then
 	echo "{}" > $pluginsFile
 fi
+
+ls docs/data/
+cat $pluginsFile
 
 mapfile -t plugins < <(jq -cr '.[]' $configFile)
 if [ ${#plugins[@]} -eq 0 ]; then
