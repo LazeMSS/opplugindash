@@ -13,7 +13,7 @@ const configFile = "json/config.json"
 var myPlugins = [];
 var stats30d = {};
 var pluginsinfo = {};
-var localPlugins = {};
+var localStats = {};
 // Graph resize timer
 var resizeTimer = null;
 
@@ -55,8 +55,8 @@ function loadData(refresh) {
 			xhrJson("https://data.octoprint.org/export/plugin_stats_30d.json", function(data) {
 				stats30d = data;
 				// Get history data and handle
-				xhrJson("json/plugins.json", function(data) {
-					localPlugins = data;
+				xhrJson("json/stats.json", function(data) {
+					localStats = data;
 					buildStats();
 				})
 			});
@@ -146,10 +146,10 @@ function buildPluginStat(item) {
 
 		// Build graph with install base
 		let canvasHis = clone.querySelectorAll("canvas[data-graph=\"history\"]")[0];
-		if (item in localPlugins) {
+		if (item in localStats) {
 			let hiskeys = [];
 			let hisval = [];
-			for (const [key, value] of Object.entries(localPlugins[item])) {
+			for (const [key, value] of Object.entries(localStats[item])) {
 				hiskeys.push(key);
 				hisval.push(value.stats.instances_month);
 			}

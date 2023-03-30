@@ -13,6 +13,7 @@ statsSrc="https://data.octoprint.org/export/plugin_stats_30d.json"
 # local save for json files for uploading later on
 statsFile="${dataDir}${jsonDir}stats.json"
 pluginsFile="${dataDir}${jsonDir}plugins.json"
+echo $ghpageurl
 
 # previous files
 localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.json"
@@ -45,14 +46,16 @@ if [ ! -d "${dataDir}${jsonDir}" ]; then
 fi
 
 # get current files local gh page data
-curl -sS "$localPluginsSrc" --output "$statsFile"
-curl -sS "$localStatsSrc" --output "$pluginsFile"
+curl -sS "$localPluginsSrc" --output "$pluginsFile"
+curl -sS "$localStatsSrc" --output "$statsFile"
 
 # Build new files if nothing was found
 if [ ! -f "$statsFile" ] || [ ! -s "$statsFile" ]; then
+	echo "Found no existing data in $localStatsSrc"
 	echo "{}" > $statsFile
 fi
 if [ ! -f "$pluginsFile" ] || [ ! -s "$pluginsFile" ]; then
+	echo "Found no existing data in $localPluginsSrc"
 	echo "{}" > $pluginsFile
 fi
 
@@ -86,7 +89,7 @@ statsTime=$(date -d "$statsTime" +"%Y-%m-%d")
 configMap=$(jq -c '[ .[] | {key: (.), value: null} ] | from_entries' config.json)
 
 # build generic stats/github stats
-jq --argjson config "$configMap" --arg now "$now" --slurpfile result "$pluginsFile" '
+jq -c --argjson config "$configMap" --arg now "$now" --slurpfile result "$pluginsFile" '
 	[
 		.[] | select(.id | in($config)) |
 		{
@@ -102,7 +105,7 @@ jq --argjson config "$configMap" --arg now "$now" --slurpfile result "$pluginsFi
 mv tmp_merge.json "$pluginsFile"
 
 # Build version stats
-jq --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile result "$statsFile" '
+jq -c --argjson config "$configMap" --arg statsTime "$statsTime" --slurpfile result "$statsFile" '
 	[
 	.plugins | to_entries | .[] | select(.key | in($config)) |
 		{
