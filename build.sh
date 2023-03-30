@@ -66,12 +66,16 @@ echo "Found ${#plugins[@]} plugin(s) in $configFile"
 
 # get octoprint data
 curl -sS -f $pluginSrc --output plugins.json
-if [ $? -ne 0 ]; then
+retVal=$?
+if [ $retVal -ne 0 ]; then
 	errormsg "Failed to download ${pluginSrc}"
+	exit $retVal;
 fi
 curl -sS -f $statsSrc --output stats.json
-if [ $? -ne 0 ]; then
+retVal=$?
+if [ $retVal -ne 0 ]; then
 	errormsg "Failed to download ${statsSrc}"
+	exit $retVal;
 fi
 
 # get stats timestamp
