@@ -207,7 +207,7 @@
       "uninstall_events": 137
     },
     "2023-03-30": {
-      "instances": 10030,
+      "instances": 10021,
       "versions": {
         "0.1.0.0": {
           "instances": 3
@@ -291,22 +291,22 @@
           "instances": 31
         },
         "0.1.8.9": {
-          "instances": 127
+          "instances": 128
         },
         "0.1.9.0": {
-          "instances": 7907
+          "instances": 7884
         },
         "0.1.9.1": {
           "instances": 2418
         },
         "0.1.9.2": {
-          "instances": 4147
+          "instances": 4149
         },
         "0.1.9.4": {
-          "instances": 3041
+          "instances": 3062
         }
       },
-      "install_events": 1479,
+      "install_events": 1476,
       "uninstall_events": 140
     }
   },
@@ -374,7 +374,7 @@
       "uninstall_events": 29
     },
     "2023-03-30": {
-      "instances": 3619,
+      "instances": 3625,
       "versions": {
         "0.2": {
           "instances": 1
@@ -389,7 +389,7 @@
           "instances": 184
         },
         "0.8.13": {
-          "instances": 3333
+          "instances": 3339
         },
         "0.8.6": {
           "instances": 8
@@ -401,7 +401,7 @@
           "instances": 9
         }
       },
-      "install_events": 307,
+      "install_events": 308,
       "uninstall_events": 29
     }
   },
@@ -505,7 +505,7 @@
       "uninstall_events": 15
     },
     "2023-03-30": {
-      "instances": 2295,
+      "instances": 2292,
       "versions": {
         "0.0.0.2": {
           "instances": 3
@@ -532,7 +532,7 @@
           "instances": 3
         },
         "0.0.1.7": {
-          "instances": 596
+          "instances": 595
         },
         "0.0.1.8": {
           "instances": 1
@@ -541,17 +541,17 @@
           "instances": 59
         },
         "0.0.2.1": {
-          "instances": 38
+          "instances": 37
         },
         "0.0.2.2": {
-          "instances": 176
+          "instances": 174
         },
         "0.0.2.3": {
-          "instances": 1624
+          "instances": 1625
         }
       },
-      "install_events": 205,
-      "uninstall_events": 16
+      "install_events": 207,
+      "uninstall_events": 17
     }
   }
 }
