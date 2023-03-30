@@ -37,10 +37,7 @@ jobs:
       - name: Run script
         run: |
           ./build.sh
-          echo "---" > "docs/test.html" 
-          echo "---" > "docs/data/test.html" 
-          ls docs/ -la 
-          ls docs/data -la
+          ls json/ -la 
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
