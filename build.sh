@@ -15,8 +15,8 @@ statsFile="${dataDir}${jsonDir}stats.json"
 pluginsFile="${dataDir}${jsonDir}plugins.json"
 
 # previous files
-localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.jsonx"
-localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.jsonx"
+localStatsSrc="https://lazemss.github.io/opplugindash/${jsonDir}stats.jsonxxx"
+localPluginsSrc="https://lazemss.github.io/opplugindash/${jsonDir}plugins.jsonxxxx"
 
 # users config file
 configFile="./config.json"
