@@ -175,4 +175,4 @@ rm tmp_* 2> /dev/null
 cp $configFile ${dataDir}${jsonDir}config.json
 
 # Update in
-sed 's/\[BUILDDATE\]/'"$(date +'%Y-%m-%d %H:%M:%S')"'/' docs/index.html
+sed -i 's/\[BUILDDATE\]/'"$(date +'%Y-%m-%d %H:%M:%S')"'/' docs/index.html
