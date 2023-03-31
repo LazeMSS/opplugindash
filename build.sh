@@ -173,3 +173,6 @@ rm tmp_* 2> /dev/null
 
 # copy config file to the website for loading
 cp $configFile ${dataDir}${jsonDir}config.json
+
+# Update in
+sed 's/\[BUILDDATE\]/'"$(date +'%Y-%m-%d %H:%M:%S')"'/' docs/index.html
