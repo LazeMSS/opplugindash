@@ -26,9 +26,6 @@
 			</div>
 		</div>
 		<div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xxl-2 g-3 p-2" id="mainDash"></div>
-		<div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xxl-2 g-3 p-2" id="detailInfo">
-
-		</div>
 		<footer class="bg-body fixed-bottom d-flex flex-wrap justify-content-end align-items-center p-2 px-3 my-0 border-top">
 			<p class="text-muted mb-0">Last build <span id="lastudpated">[BUILDDATE]</span></p>
 		</footer>
@@ -38,7 +35,7 @@
 	<template id="mainDashTemplate">
 		<div class="col p-2">
 			<div class="card h-100 shadow-sm m-2">
-				<h5 class="card-header text-truncate position-relative"><a href="#" onclick="javascript:return buildInfo(this);" data-pinfo="id"><i class="bi bi-search"></i></a><span data-pinfo="title"></span><a class="position-absolute top-0 end-0 me-2 mt-2" data-pinfo="page" href="#" target="_blank"><i class="fs-6 bi bi-box-arrow-up-right"></i></a></h5>
+				<h5 class="card-header text-truncate position-relative"><span data-pinfo="title"></span><a href="#" onclick="javascript:return buildInfo(this);" class="position-absolute top-0 end-0 me-2 mt-2" data-pinfo="id"><i class="bi bi-fullscreen"></i></a></h5>
 				<div class="card-body">
 					<div class="row">
 						<div class="col" data-graph="versions"></div>
@@ -58,7 +55,7 @@
 					</div>
 				</div>
 				<div class="card-footer text-muted">
-					<a data-pinfo="homepage" href="#"><i class="bi bi-house-fill"></i></a> <a data-pinfo="archive" href="#"><i class="bi bi-github"></i></a> <span class="float-end text-muted" data-pinfo="github.latest_release.tag"></span>
+					<a data-pinfo="homepage" href="#"><i class="bi bi-house-fill"></i></a> <a data-pinfo="archive" href="#"><i class="bi bi-github"></i></a> <a data-pinfo="page" href="#" target="_blank"><i class="bi bi-box-arrow-up-right"></i></a> <span class="float-end text-muted" data-pinfo="github.latest_release.tag"></span>
 				</div>
 			</div>
 		</div>
@@ -66,5 +63,21 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
 	<script src="//cdn.jsdelivr.net/npm/chart.js"></script>
 	<script src="main.js?new"></script>
+
+	<div class="modal fade" tabindex="-1"  id="detailModal" aria-hidden="true">
+		<div class="modal-dialog modal-fullscreen-lg-down modal-xl">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="detailModalHeader">Modal title</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					<div class="row row-cols-1 row-cols-md-1 row-cols-lg-2 row-cols-xxl-2 g-3 p-2" id="detailInfo"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

@@ -118,30 +118,33 @@ function buildPluginStat(item) {
 		$('#mainDash').append(clone);
 
 		// Build install graphs now
-		buildLineGraph(clone.find('[data-graph="installs"]'),['Installs'],[0],totalStats[item]);
+		buildLineGraph(clone.find('[data-graph="installs"]'),['Installs'],[0],totalStats[item],'Total installs');
 		buildPieChart(clone.find('[data-graph="versions"]'),Object.keys(stats30d.plugins[item].versions),'instances',stats30d.plugins[item].versions,5,'Release version');
 	}
 }
 
 
 function buildInfo(item){
+	const myModal = new bootstrap.Modal('#detailModal');
 	let litem = $(item).attr('href');
+	$('#detailModalHeader').html($(item).closest('div.card').find('[data-pinfo="title"]').text() + " details...");
 	xhrJson("json/details.json", function(data) {
 		if (litem in data){
 			localStats = data[litem];
 			$('#detailInfo').html('');
-			buildLineGraph($('#detailInfo'),['Installs'],[0],totalStats[litem]);
-			buildLineGraph($('#detailInfo'),['instances_month','instances_week'],['installbase.instances_month','installbase.instances_week'],localStats);
-			buildLineGraph($('#detailInfo'),['install_events_month','install_events_week'],['installbase.install_events_month','installbase.install_events_week'],localStats);
-			buildLineGraph($('#detailInfo'),['Open issues','Closed issues'],['ghissues.open','ghissues.closed'],localStats);
-			buildLineGraph($('#detailInfo'),['Stars'],['ghstars'],localStats);
+			buildLineGraph($('#detailInfo'),['Installs'],[0],totalStats[litem],'Total installs');
+			buildLineGraph($('#detailInfo'),['Monthly','Weekly'],['installbase.instances_month','installbase.instances_week'],localStats,'Instances');
+			buildLineGraph($('#detailInfo'),['Monthly','Weekly'],['installbase.install_events_month','installbase.install_events_week'],localStats,'Install events');
+			buildLineGraph($('#detailInfo'),['Open','Closed'],['ghissues.open','ghissues.closed'],localStats,'GitHub issues');
+			buildLineGraph($('#detailInfo'),['Stars'],['ghstars'],localStats,'GitHub stars');
 			buildPieChart($('#detailInfo'),Object.keys(stats30d.plugins[litem].versions),'instances',stats30d.plugins[litem].versions,0,'Release version');
+			myModal.show();
 		}
 	})
 	return false;
 }
 
-function buildLineGraph(target,labels,datakeys,datasrc){
+function buildLineGraph(target,labels,datakeys,datasrc,titleStr){
 	var canvasitem = $('<canvas/>');
 	let datasetsIns = [];
 	let labelsGen = [];
@@ -169,11 +172,27 @@ function buildLineGraph(target,labels,datakeys,datasrc){
 
 	target.append(canvasitem);
 
+	var legendOptions = {
+		display: true
+	};
+	if (datasetsIns.length == 1){
+		legendOptions.display = false;
+	}
+
 	new Chart(canvasitem, {
 		type: 'line',
 		data: {
 			labels: labelsGen,
 			datasets: datasetsIns
+		},
+		options: {
+			plugins: {
+				title: {
+					display: true,
+					text: titleStr
+				},
+				legend: legendOptions
+			}
 		}
 	});
 }
