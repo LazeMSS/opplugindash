@@ -9,6 +9,12 @@ if [ -z ${ghpageurl+x} ]; then
 	exit 1
 fi
 
+if [[ "$*" == *"verbose"* ]] || [[ "$*" == *"-v"* ]]; then
+	VERBOSE=true
+else
+	VERBOSE=false
+fi
+
 #[Local variables]#############################################
 # local repo folder for www content
 dataDir="./docs/"
@@ -35,6 +41,18 @@ now=$(date +'%Y-%m-%d')
 ##############################################################
 
 echo "Building data for ${ghpageurl}"
+
+if $VERBOSE; then
+	echo 'Data dir         : '"$dataDir"
+	echo 'JSON path        : '"$jsonDir"
+	echo 'Plugins info src : '"$pluginSrc"
+	echo 'Plugins stats src: '"$statsSrc"
+	echo 'Current totals   : '"$curTotals"
+	echo 'Current details  : '"$curDetails"
+	echo 'Local totals     : '"$localTotals"
+	echo 'Local details    : '"$localDetails"
+	echo 'Config file      : '"$configFile"
+fi
 
 # Config file found
 if [ ! -f $configFile ] || [ ! -s "$configFile" ]; then
@@ -175,4 +193,4 @@ rm tmp_* 2> /dev/null
 cp $configFile ${dataDir}${jsonDir}config.json
 
 # Update in
-sed -i 's/\[BUILDDATE\]/'"$(date +'%Y-%m-%d %H:%M:%S')"'/' docs/index.html
+sed -i 's/id=\"lastudpated\">.*<\/span>/id=\"lastudpated\">'"$(date +'%Y-%m-%d %H:%M:%S')"'<\/span>/' docs/index.html
